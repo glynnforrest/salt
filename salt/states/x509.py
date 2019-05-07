@@ -437,7 +437,11 @@ def _certificate_info_matches(cert_info, required_cert_info, check_serial=False)
 
     return len(diff) == 0, diff
 
+
 def _certificate_days_remaining(cert_info):
+    '''
+    Get the days remaining on a certificate, defaulting to 0 if an error occurs.
+    '''
     try:
         expiry = cert_info['Not After']
         return (
