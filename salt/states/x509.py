@@ -482,8 +482,8 @@ def _certificate_is_valid(name, days_remaining, append_certs, **cert_spec):
             return False, 'Certificate needs renewal: {0} days remaining but it needs to be at least {1}'.format(actual_days_remaining, days_remaining), cert_info
 
         return True, '', cert_info
-    except salt.exceptions.SaltInvocationError:
-        return False, '{0} is not a valid certificate'.format(name), {}
+    except salt.exceptions.SaltInvocationError as e:
+        return False, '{0} is not a valid certificate: {1}'.format(name, str(e)), {}
 
 
 def certificate_managed(name,
