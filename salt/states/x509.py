@@ -6,7 +6,7 @@ Manage X509 Certificates
 
 :depends: M2Crypto
 
-This module can enable managing a complete PKI infrastructure including creating private keys, CA's,
+This module can enable managing a complete PKI infrastructure including creating private keys, CAs,
 certificates and CRLs. It includes the ability to generate a private key on a server, and have the
 corresponding public key sent to a remote CA to create a CA signed certificate. This can be done in
 a secure manner, where private keys are always generated locally and never moved across the network.
@@ -64,6 +64,12 @@ the mine where it can be easily retrieved by other minions.
       file.directory
 
     /etc/pki/ca.crt:
+      x509.private_key_managed:
+        - name: /etc/pki/ca.key
+        - bits: 4096
+        - backup: True
+
+    /etc/pki/ca.crt:
       x509.certificate_managed:
         - signing_private_key: /etc/pki/ca.key
         - CN: ca.example.com
@@ -77,10 +83,6 @@ the mine where it can be easily retrieved by other minions.
         - days_valid: 3650
         - days_remaining: 0
         - backup: True
-        - managed_private_key:
-            name: /etc/pki/ca.key
-            bits: 4096
-            backup: True
         - require:
           - file: /etc/pki
 
@@ -140,6 +142,12 @@ This state creates a private key then requests a certificate signed by ca accord
 .. code-block:: yaml
 
     /etc/pki/www.crt:
+      x509.private_key_managed:
+        - name: /etc/pki/www.key
+        - bits: 4096
+        - backup: True
+
+    /etc/pki/www.crt:
       x509.certificate_managed:
         - ca_server: ca
         - signing_policy: www
@@ -147,11 +155,6 @@ This state creates a private key then requests a certificate signed by ca accord
         - CN: www.example.com
         - days_remaining: 30
         - backup: True
-        - managed_private_key:
-            name: /etc/pki/www.key
-            bits: 4096
-            backup: True
-
 '''
 
 # Import Python Libs
@@ -268,8 +271,8 @@ def private_key_managed(name,
 
     new:
         Always create a new key. Defaults to False.
-        Combining new with :mod:`prereq <salt.states.requsities.preqreq>`, or when used as part of a
-        `managed_private_key` can allow key rotation whenever a new certificiate is generated.
+        Combining new with :mod:`prereq <salt.states.requsities.preqreq>`
+        can allow key rotation whenever a new certificiate is generated.
 
     overwrite:
         Overwrite an existing private key if the provided passphrase cannot decrypt it.
