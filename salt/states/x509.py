@@ -557,11 +557,7 @@ def certificate_managed(name,
 
     if 'public_key' not in kwargs and 'signing_private_key' not in kwargs:
         raise salt.exceptions.SaltInvocationError(
-            'Either public_key or signing_private_key must be specified.')
-
-    if 'public_key' in kwargs and 'signing_private_key' in kwargs:
-        raise salt.exceptions.SaltInvocationError(
-            'Either public_key or signing_private_key must be specified, not both.')
+            'public_key or signing_private_key must be specified.')
 
     ret = {'name': name,
        'result': False,
