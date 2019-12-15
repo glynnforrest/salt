@@ -597,7 +597,7 @@ def certificate_managed(name,
             contents += append_file_contents
         except salt.exceptions.SaltInvocationError as e:
             ret['result'] = False
-            ret['comment'] = '{0} is not a valid certificate file, cannot append it to the certificate:\n{1}'.format(name, str(e))
+            ret['comment'] = '{0} is not a valid certificate file, cannot append it to the certificate {1}.\nThe error returned by the x509 module was:\n{2}'.format(append_file, name, str(e))
             return ret
 
     file_args, extra_args = _get_file_args(name, **kwargs)
